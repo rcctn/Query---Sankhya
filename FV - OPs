@@ -1,32 +1,23 @@
 SELECT 
+    ordemprod.CODPLP AS Planta, ordemprod.DHINST AS Data_Inicialização, ordemprod.DHTERMINO AS Data_Finalização,
+    procprod.VERSAO AS Versão_Processo, procprod.CODPRC AS COD_Processo, procprod.DESCRABREV AS Descrição_Processo,
+    ordemprod.STATUSPROC AS Status_OP, ordemprod.IDIPROC AS Nro_OP, ordemprod.NROLOTE AS Nro_Lote,
+    prodacab.CODPRODPA AS COD_Prod, prod.DESCRPROD AS Descr_Produto, prod.CODGRUPOPROD AS ID_Grupo,
+    prodacab.QTDPRODUZIR AS Quantidade, procprod.ATIVO AS Processo_Ativo, ordemprod.IDPROC AS ID_Versão_Processo
+    
+FROM TPRIPROC ordemprod
 
-    tORDENSPROD.CODPLP AS Planta,
-    tORDENSPROD.DHINST AS Data_Inicialização,
-    tORDENSPROD.DHTERMINO AS Data_Finalização,
-        tPROCPROD.VERSAO AS Versão_Processo,
-        tPROCPROD.CODPRC AS COD_Processo,
-        tPROCPROD.DESCRABREV AS Descrição_Processo,
-    tORDENSPROD.STATUSPROC AS Status_OP,
-    tORDENSPROD.IDIPROC AS Nro_OP,
-    tORDENSPROD.NROLOTE AS Nro_Lote,
-            tPRODACAB.CODPRODPA AS COD_Prod,
-                tPROD.DESCRPROD AS Descr_Produto,
-                tPROD.CODGRUPOPROD AS ID_Grupo,    
-            tPRODACAB.QTDPRODUZIR AS Quantidade,
-        tPROCPROD.ATIVO AS Processo_Ativo,
-    tORDENSPROD.IDPROC AS ID_Versão_Processo
-                    
+INNER JOIN TPRPRC procprod ON ordemprod.IDPROC    = procprod.IDPROC
+INNER JOIN TPRIPA prodacab ON ordemprod.IDIPROC   = prodacab.IDIPROC AND ordemprod.NROLOTE = prodacab.NROLOTE
+INNER JOIN TGFPRO prod     ON prodacab.CODPRODPA  = prod.CODPROD
 
-FROM 
-    TPRIPROC tORDENSPROD
-INNER JOIN 
-    TPRPRC tPROCPROD ON tORDENSPROD.IDPROC = tPROCPROD.IDPROC
-INNER JOIN 
-    TPRIPA tPRODACAB ON tORDENSPROD.IDIPROC = tPRODACAB.IDIPROC AND tORDENSPROD.NROLOTE = tPRODACAB.NROLOTE
-INNER JOIN
-    TGFPRO tPROD ON tPRODACAB.CODPRODPA = tPROD.CODPROD
+WHERE 1=1 and procprod.ATIVO = 'S' and CODPRC IN
 
-WHERE 1=1 and tPROCPROD.ATIVO = 'S' and  CODPRC IN
-
-    (10004,100003,10005,10009,10003,10001,1004)
+    (10004, --Terceirização
+    100003, --ROTEIRO 3 (MANUAL) - IMPLANTES/COMPONENTES ANODIZADOS
+    10005,  --FF-004 (VET)
+    10009,  --FF-011 (VET) - TIN
+    10003,  --ROTEIRO 3 - IMPLANTES/COMPONENTES ANODIZADOS
+    10001,  --ROTEIRO 1 - PROCESSO PRODUTIVO EM TERCEIRO
+    1004)   --TERCEIRIZAÇÃO
 
