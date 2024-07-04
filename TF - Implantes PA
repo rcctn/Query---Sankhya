@@ -1,0 +1,15 @@
+SELECT DISTINCT
+
+    CODPROD AS IDPRODUTO,
+    DESCRPROD AS DESCRIÇÃO,
+    CODGRUPOPROD AS IDGRUPO
+    
+FROM TGFPRO
+
+WHERE 1=1 AND ativo = 's' and CODGRUPOPROD in 
+
+    (10101, --Implante B-Fix
+    10201,  --Implante I-fix
+    10301,  --Implante E-fix
+    10401,  --Implante C-fix
+    10501)  --Implante Z-fix
